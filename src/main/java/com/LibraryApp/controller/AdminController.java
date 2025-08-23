@@ -41,7 +41,7 @@ public class AdminController {
                     String bookTitle = "Bilinmeyen Kitap";
                     String bookAuthor = "Bilinmeyen Yazar";
 
-                    if (bookResponse.getStatusCode().is2xxSuccessful() && bookResponse.getBody() != null) {
+                    if (bookResponse.getStatusCode().is2xxSuccessful() && bookResponse.getBody() != null) { //Hem status hem null kontrolü yapıyoruz.
                         bookTitle = bookResponse.getBody().getTitle();
                         bookAuthor = bookResponse.getBody().getAuthor();
                     }
@@ -112,3 +112,4 @@ public class AdminController {
         return ResponseEntity.ok(stats); //Bu satır ile HTTP 200 OK status code'u döner, JSON formatında stats verisini döner, Content-Type: application/json header'ı ekler, Client'a response'u gönderir.
     }
 }
+
