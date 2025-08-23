@@ -46,14 +46,9 @@ public class AdminController {
                         bookAuthor = bookResponse.getBody().getAuthor();
                     }
 
-                    var studentResponse = studentController.getStudentById(borrow.getStudentId());// Öğrenci bilgilerini alır.
-                    String studentName = "Bilinmeyen Öğrenci";
+                    var studentResponse = studentController.getStudentById(borrow.getStudentId()); //Id ye göre belirli bir öğrenci bilgilerini alıyoruz.
+                    String studentName = "Bilinmeyen Öğrenci"; //Id'de öğrenci bulunmadığında dönecek veriler.
                     String studentSurname = "";
-
-                    if (studentResponse.getStatusCode().is2xxSuccessful() && studentResponse.getBody() != null) {
-                        studentName = studentResponse.getBody().getFirstName();
-                        studentSurname = studentResponse.getBody().getLastName();
-                    }
 
                     return new BorrowDto( //Öğrenci bilgilerini dönüyoruz.
                             borrow.getBookId(),
