@@ -14,9 +14,9 @@ public class StudentController {
 
     // Constructor'da verileri ekle
     public StudentController() {
-        students.add(new StudentDto(1L, "Ahmet", "Yılmaz", "2023001", "ahmet@example.com", "123456"));
-        students.add(new StudentDto(2L, "Ayşe", "Demir", "2023002", "ayse@example.com", "123456"));
-        students.add(new StudentDto(3L, "Mehmet", "Kaya", "2023003", "mehmet@example.com", "123456"));
+        students.add(new StudentDto(1L, "Ahmet", "Yılmaz", "2023001", "ahmet@example.com", "123456", false));
+        students.add(new StudentDto(2L, "Ayşe", "Demir", "2023002", "ayse@example.com", "123456", false));
+        students.add(new StudentDto(3L, "Mehmet", "Kaya", "2023003", "mehmet@example.com", "123456", true));
     }
 
     @GetMapping //Tüm öğrencileri listele endpoint'i /api/students Method: GET
@@ -47,7 +47,8 @@ public class StudentController {
                         studentDto.getLastName() != null ? studentDto.getLastName() : students.get(i).getLastName(),
                         studentDto.getStudentNumber() != null ? studentDto.getStudentNumber() : students.get(i).getStudentNumber(),
                         studentDto.getEmail() != null ? studentDto.getEmail() : students.get(i).getEmail(),
-                        studentDto.getPassword() != null ? studentDto.getPassword() : students.get(i).getPassword()
+                        studentDto.getPassword() != null ? studentDto.getPassword() : students.get(i).getPassword(),
+                        students.get(i).isRole()
                 );
                 students.set(i, updatedStudent);
                 return ResponseEntity.ok("Öğrenci başarıyla güncellendi! ID: " + id);

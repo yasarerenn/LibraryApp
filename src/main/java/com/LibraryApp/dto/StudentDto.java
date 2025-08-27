@@ -1,6 +1,6 @@
 package com.LibraryApp.dto;
 
- // Öğrenci verilerini temsil eden DTO (Data Transfer Object) sınıfı. JSON formatında veri alışverişi yapar.
+// Öğrenci verilerini temsil eden DTO (Data Transfer Object) sınıfı. JSON formatında veri alışverişi yapar.
 public class StudentDto {
 
     private Long id;           // Öğrenci ID
@@ -9,18 +9,20 @@ public class StudentDto {
     private String studentNumber; // Öğrenci numarası
     private String email;      // Öğrenci email'i
     private String password;   // Öğrenci şifresi
+    private boolean role; // Kullanıcı-admin kontrolü
 
     // Default constructor
     public StudentDto() {}
 
     // Parametreli constructor
-    public StudentDto(Long id, String firstName, String lastName, String studentNumber, String email, String password) {
+    public StudentDto(Long id, String firstName, String lastName, String studentNumber, String email, String password, boolean role) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.studentNumber = studentNumber;
         this.email = email;
         this.password = password;
+        this.role = role;
     }
 
     // Getter ve Setter metodları
@@ -36,6 +38,8 @@ public class StudentDto {
     public void setEmail(String email) {this.email = email;}
     public String getPassword() {return password;}
     public void setPassword(String password) {this.password = password;}
+    public boolean isRole() {return role;}
+    public void setRole(boolean role) {this.role = role;}
 
     @Override //toString ile bilgileri yazdırabiliyoruz.
     public String toString() {
@@ -46,6 +50,7 @@ public class StudentDto {
                 ", studentNumber='" + studentNumber + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
+                ", role=" + role +
                 '}';
     }
 }

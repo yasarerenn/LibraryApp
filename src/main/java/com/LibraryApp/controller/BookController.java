@@ -15,7 +15,7 @@ public class BookController {
     private final List<BookDto> books = new ArrayList<>(); //Dummy kitap listesi tüm metodlarda kullanılacak.
     private Long nextId = 6L; // Sonraki ID için sayaç ekliyoruz.
 
-    public BookController() {     //Constructor'da örnek veriler ekliyoruz.
+    public BookController() {     //Constructor'da örnek veriler ekliyoruz
         books.add(new BookDto(1L, "Algoritma ve Programlama Mantığı", "Burak Tungut"));
         books.add(new BookDto(2L, "Projeler ile Python", "Mustafa Aydemir"));
         books.add(new BookDto(3L, "C++ ile Projeler", "Tolga Büyüktanır"));
@@ -68,11 +68,12 @@ public class BookController {
     }
 
     /*
-     Yeni kitap ekle endpoint'i:
+     Yeni kitap ekle endpoint'i (Sadece Admin):
 
      - HTTP Method: POST
      - URL: /api/books
      - Content-Type: application/json
+     - Header: user-role (Admin kontrolü için: "adm" veya "std")
 
      Örnek:
      {
@@ -81,16 +82,25 @@ public class BookController {
      }
      */
     @PostMapping
-    public ResponseEntity<String> addBook(@RequestBody BookDto bookDto) {
+    public ResponseEntity<String> addBook(@RequestBody BookDto bookDto, @RequestHeader("user-role") String userRole) {
+        // Admin kontrolü yap - sadece "adm" rolü kabul edilir
+        if (!"adm".equals(userRole)) {
+            System.out.println("Yetkisiz erişim denemesi: Kullanıcı rolü '" + userRole + "' admin değil!");
+            return ResponseEntity.status(403).body("Bu işlem için admin yetkisi gereklidir! Sadece 'adm' rolüne sahip kullanıcılar kitap ekleyebilir.");
+        }
 
-        System.out.println("Yeni kitap ekleniyor: " + bookDto);
+        System.out.println("Yeni kitap ekleme isteği. Kullanıcı rolü: " + userRole);
+        System.out.println("Eklenecek kitap: " + bookDto);
 
         Long newId = (long) (books.size() + 1); //Yeni ID oluşturur ve kitabı listeye ekler.
         bookDto.setId(newId);
         books.add(bookDto);
 
+        System.out.println("Kitap başarıyla eklendi. Admin kullanıcı tarafından. Kitap ID: " + newId);
         return ResponseEntity.ok("Kitap başarıyla eklendi! ID: " + newId);
     }
+
+
 
     /*
      Kitap güncelle endpoint'i:
@@ -98,11 +108,17 @@ public class BookController {
      - HTTP Method: PATCH
      - URL: /api/books/{id}
      - Content-Type: application/json
+     - Header: user-role (Admin kontrolü için: "adm" veya "std")
 
      - PATCH metodunu sadece belirli alanları değiştirmek için kullanıyoruz.
      */
     @PatchMapping("/{id}")
-    public ResponseEntity<String> updateBook(@PathVariable Long id, @RequestBody BookDto bookDto) {
+    public ResponseEntity<String> updateBook(@PathVariable Long id, @RequestBody BookDto bookDto, @RequestHeader("user-role") String userRole) {
+        // Admin kontrolü yap - sadece "adm" rolü kabul edilir
+        if (!"adm".equals(userRole)) {
+            System.out.println("Yetkisiz erişim denemesi: Kullanıcı rolü '" + userRole + "' admin değil!");
+            return ResponseEntity.status(403).body("Bu işlem için admin yetkisi gereklidir! Sadece 'adm' rolüne sahip kullanıcılar kitap ekleyebilir.");
+        }
 
         System.out.println("Kitap güncelleniyor, ID: " + id);
         System.out.println("Güncellenecek bilgiler: " + bookDto);
@@ -130,10 +146,13 @@ public class BookController {
      - Örnek: /api/books/1 → ID'si 1 olan kitabı siler
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteBook(@PathVariable Long id) {
-
+    public ResponseEntity<String> deleteBook(@PathVariable Long id, @RequestHeader("user-role") String userRole) {
+        // Admin kontrolü yap - sadece "adm" rolü kabul edilir
+        if (!"adm".equals(userRole)) {
+            System.out.println("Yetkisiz erişim denemesi: Kullanıcı rolü '" + userRole + "' admin değil!");
+            return ResponseEntity.status(403).body("Bu işlem için admin yetkisi gereklidir! Sadece 'adm' rolüne sahip kullanıcılar kitap ekleyebilir.");
+        }
         System.out.println("Kitap siliniyor, ID: " + id);
-
         boolean removed = books.removeIf(book -> book.getId().equals(id)); // Listeden kitabı bulup ve siler.
 
         return removed ? ResponseEntity.ok("Kitap başarıyla silindi! ID: " + id)

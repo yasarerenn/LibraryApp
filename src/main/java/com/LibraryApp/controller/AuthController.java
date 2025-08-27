@@ -68,7 +68,7 @@ public class AuthController {
 
             if (foundStudent != null) { //Giriş başarılı
                 System.out.println("Giriş başarılı: " + foundStudent.getFirstName() + " " + foundStudent.getLastName());
-                return ResponseEntity.ok("Giriş başarılı!");
+                return ResponseEntity.ok(foundStudent.isRole() ? "adm" : "std"); // girişten sonra admin veya student kontrolü dönüyoruz.
             } else { //Giriş başarısız
                 System.out.println("Giriş başarısız: Email veya şifre yanlış");
                 return ResponseEntity.badRequest().body("Giriş başarısız! Email veya şifre yanlış.");
